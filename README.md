@@ -13,3 +13,4 @@ It is a fork of GlobalRecentChanges by Dentonius on Wikimedia. https://meta.wiki
 # Known issues
 - When one wiki fails to load, the rest of the program halts
 - Edits that happen on the same second will render in the wrong order
+- Some wikis are not compatible due to their DDoS protections

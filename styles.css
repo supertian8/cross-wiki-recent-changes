@@ -1,0 +1,7 @@
+.errorDiv {
+  max-height: 96px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column-reverse;
+  color: red;
+}

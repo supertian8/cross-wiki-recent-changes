@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Configuration - Cross-wiki recent changes</title>
+	<link rel="icon" type="image/x-icon" href="favicon.ico">
+  <body>
+	<script src="compressToCookie.js"></script> 
+	<script src="decompressFromCookie.js"></script> 
+	<script src="config.js"></script> 
+	<div> <a href="./">Cross-wiki recent changes</a> | <b>Configuration</b> | <a href="https://github.com/supertian8/cross-wiki-recent-changes">GitHub repo</a></div>
+	<div> 
+	<input type="button" value="Add" onclick="addBlankWiki()"/>
+	<input type="button" value="Save" onclick="saveWikis()"/>
+	<input type="button" value="Export" onclick="downloadWikis()"/>
+	<input type="file" value="Import" id="import1" accept=".cwrc"/>
+	</div>
+	<hr/>	
+	<div>
+		Correct URL examples:️
+		https://en.wikipedia.org ✔️
+		https://zh.wiktionary.org ✔️
+		https://www.mediawiki.org ✔️
+	</div>
+	<div>
+		Incorrect URL examples:
+		en.wikipedia.org ❌
+		https://zh.wiktionary.org/ ❌
+		https://www.mediawiki.org/wiki ❌
+	</div>
+	<p>
+		API path should contain the  location of api.php on your wiki. You can find it by going to Special:Version, then going to 'Entry point URLs'. /w/api.php or /api.php is usually what this value is set to.
+	</p>
+	<hr/>
+	<div id="wikiContents"></div>
+	<input type="button" value="Add" onclick="addBlankWiki()"/>
+	<input type="button" value="Save" onclick="saveWikis()"/>
+	<input type="button" value="Export" onclick="downloadWikis()"/>
+	<input type="file" value="Import" id="import2" accept=".cwrc"/>
+	</body>
+</html>

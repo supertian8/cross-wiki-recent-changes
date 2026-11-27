@@ -3,9 +3,11 @@
 
 window.GlobalRecentChanges = {};
 
-Notification.requestPermission((result) => {
-  console.log(result);
-});
+if ("Notification" in window) {
+	Notification.requestPermission((result) => {
+	  console.log(result);
+	});
+}
 
 async function apiSetup () {
 	for (let i = 0; i < window.wikis.length; i += 5){

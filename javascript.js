@@ -81,7 +81,49 @@ function setup () {
 	});
 }
 
-window.GlobalRecentChanges.main = function () {
+async function checkForNewEdits () {
+	if (!document.getElementById("firstTimestamp")) {
+		return true; //runs if edits have not been written at all yet; runs shortly after the website loads
+	}
+	
+	var toUpdate = false;
+	for (let i = 0; i < window.wikis.length; i += 5){
+		//console.log("Starting initial get for " + window.wikis[i]);
+		//action=query&format=json&list=recentchanges&formatversion=2&rcprop=timestamp&rclimit=1
+		let params =
+			{
+				action: "query",
+				origin: "*",
+				list: "recentchanges",
+				rcprop: "timestamp",
+				rclimit: "1",
+				format: "json"
+			};
+		
+		var PARTIAL_URL = "?";
+		Object.keys(params).forEach(function(key) {PARTIAL_URL += "&" + key + "=" + params[key];});
+		var urlToFetch = window.wikis[i] + window.wikis[i + 1] + PARTIAL_URL;
+		try {
+			await fetch(urlToFetch)
+				.then(function(response) {return response.json();})
+				.then(function(response) {
+					const currentTime = new Date();
+					let editTimePlusTen = new Date(response.query.recentchanges[0].timestamp);
+					editTimePlusTen = new Date(editTimePlusTen.getTime() + 10 * 1000);
+					if (editTimePlusTen > currentTime) {
+						toUpdate = true;
+					}
+				});
+		} catch (errorMessage) {
+			console.log(errorMessage);
+			toUpdate = true;
+		}
+	}
+	
+	return toUpdate;
+}
+
+window.GlobalRecentChanges.main = async function () {
     let containers = document.getElementById('main-lines');
 	let wikis = window.wikis;
 	
@@ -124,13 +166,19 @@ window.GlobalRecentChanges.main = function () {
 		}
 	}
 	
-    window.GlobalRecentChanges.fetcher(globalrc);
+	var runFetch = await checkForNewEdits();
+	console.log(runFetch);
+	if (runFetch) {
+		window.GlobalRecentChanges.fetcher(globalrc);
+	} else {
+		setTimeout(function() { window.GlobalRecentChanges.main(); }, 6000);
+	}
 };
 
 window.GlobalRecentChanges.fetcher = async function(globalrc) {
     if (globalrc.queueIndex < globalrc.queueRoot.length) {
-        let queueIndex = globalrc.queueIndex;
         //let elementIndex = globalrc.elementIndex;
+        let queueIndex = globalrc.queueIndex;
         let params = globalrc.params;
 			
 		let PARTIAL_URL = "?";
@@ -186,7 +234,6 @@ window.GlobalRecentChanges.fetcher = async function(globalrc) {
     }
 
     let recentchanges = globalrc.recentchanges;	
-	console.log(recentchanges);
 	
     recentchanges.sort((a,b) => (a.timestamp > b.timestamp) ? 1 : ((b.timestamp > a.timestamp) ? -1 : 0));
     recentchanges.reverse();

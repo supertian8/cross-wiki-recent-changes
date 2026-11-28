@@ -135,6 +135,7 @@ window.GlobalRecentChanges.main = async function () {
 			origin: "*",
             list: "recentchanges",
             rcprop: "timestamp|title|ids|sizes|flags|user|parsedcomment|comment|loginfo",
+			rctype: "edit|log|new",
             rclimit: limit,
             rcnamespace: rcnamespace,
             format: "json"
